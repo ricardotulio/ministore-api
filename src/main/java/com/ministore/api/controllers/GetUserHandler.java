@@ -22,7 +22,7 @@ public class GetUserHandler {
         value = "/user/{id}",
         produces = "application/json"
     )
-    public Optional<User> getUser(@PathVariable Long id) {
+    public Optional<User> getUser(@PathVariable String id) {
         return this.repository.findById(id);
     }
 

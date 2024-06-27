@@ -11,5 +11,5 @@ import com.ministore.api.entities.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     User save(User user);
 
-    Optional<User> findById(Long id);
+    Optional<User> findById(String id);
 }

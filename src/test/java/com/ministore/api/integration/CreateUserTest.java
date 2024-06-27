@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 class CreateUserResponse {
-    public Integer id;
+    public String id;
     public String username;
 }
 
@@ -35,7 +35,7 @@ public class CreateUserTest {
             .content("{\"username\":\"ricardotulio\"}")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").isNumber())
+            .andExpect(jsonPath("$.id").isString())
             .andReturn();
 
         ObjectMapper mapper = new ObjectMapper();
