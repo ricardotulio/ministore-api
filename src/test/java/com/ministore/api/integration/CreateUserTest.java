@@ -51,4 +51,39 @@ public class CreateUserTest {
             .andExpect(jsonPath("$.id").value(response.id))
             .andExpect(jsonPath("$.username").value(response.username));
     }
+
+    @Test
+    void mustReturnNotFoundWhenUserNotFound() throws Exception {
+        this.mockMvc.perform(get("/user/abc"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void mustReturnBadRequestWhenCreateUserDoesntReceivePayload() throws Exception {
+        this.mockMvc.perform(
+            post("/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void mustReturnBadRequestWhenUsernameIsInvalid() throws Exception {
+        this.mockMvc.perform(
+            post("/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"username\":\"\"}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void mustReturnBadRequestWhenPayloadDoesntHaveUsername() throws Exception {
+        this.mockMvc.perform(
+            post("/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
 }
