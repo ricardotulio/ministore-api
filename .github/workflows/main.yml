@@ -17,4 +17,4 @@ jobs:
         with:
           compose-file: "./docker-compose.yml"
           test-container: "app"
-          test-command: "./mvnw clean test"
+          test-command: "./mvnw --ntp test"
