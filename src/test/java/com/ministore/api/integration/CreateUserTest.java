@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.javafaker.Faker;
 
 class CreateUserResponse {
     public String id;
@@ -70,12 +71,8 @@ public class CreateUserTest {
             CreateUserResponse.class
         );
 
-        this.mockMvc.perform(
-            get("/user/" + response.id)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
+        performGet(response.id)
             .andExpect(jsonPath("$.id").value(response.id))
-            .andExpect(jsonPath("$.username").value(response.username));
             .andExpect(jsonPath("$.username").value(username));
     }
 
@@ -93,36 +90,25 @@ public class CreateUserTest {
 
     @Test
     void mustReturnNotFoundWhenUserNotFound() throws Exception {
-        this.mockMvc.perform(get("/user/abc"))
+        performGet("whatever")
             .andExpect(status().isNotFound());
     }
 
     @Test
     void mustReturnBadRequestWhenCreateUserDoesntReceivePayload() throws Exception {
-        this.mockMvc.perform(
-            post("/user")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
+        performPost(null)
             .andExpect(status().isBadRequest());
     }
 
     @Test
     void mustReturnBadRequestWhenUsernameIsInvalid() throws Exception {
-        this.mockMvc.perform(
-            post("/user")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"username\":\"\"}")
-            .accept(MediaType.APPLICATION_JSON))
+        performPost(createPostPayload(""))
             .andExpect(status().isBadRequest());
     }
 
     @Test
     void mustReturnBadRequestWhenPayloadDoesntHaveUsername() throws Exception {
-        this.mockMvc.perform(
-            post("/user")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{}")
-            .accept(MediaType.APPLICATION_JSON))
+        performPost("{}")
             .andExpect(status().isBadRequest());
     }
 }
