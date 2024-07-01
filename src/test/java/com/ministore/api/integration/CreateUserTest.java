@@ -12,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 class CreateUserResponse {
@@ -26,14 +29,37 @@ public class CreateUserTest {
     @Autowired
     private MockMvc mockMvc;
 
+    private Faker faker = new Faker();
+
+    private ResultActions performGet(String userId) throws Exception {
+        return this.mockMvc.perform(
+            get("/users/" + userId)
+            .accept(MediaType.APPLICATION_JSON));
+    }
+
+    private ResultActions performPost(String payload) throws Exception {
+        MockHttpServletRequestBuilder post = post("/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+        if (payload != null) {
+            post = post.content(payload);
+        }
+
+        return this.mockMvc.perform(post);
+    }
+
+    private String createPostPayload(String username) {
+        return "{\"username\":\"" + username + "\"}";
+    }
+
     @Test
     void mustBeAbleToCreateAUser() throws Exception
     {
-        MvcResult result = this.mockMvc.perform(
-            post("/user")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"username\":\"ricardotulio\"}")
-            .accept(MediaType.APPLICATION_JSON))
+        String username = faker.name().username();
+        String payload =  createPostPayload(username);
+
+        MvcResult result = performPost(payload)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").isString())
             .andReturn();
@@ -50,6 +76,19 @@ public class CreateUserTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").value(response.id))
             .andExpect(jsonPath("$.username").value(response.username));
+            .andExpect(jsonPath("$.username").value(username));
+    }
+
+    @Test
+    void mustReturnBadRequestWhenUsernameAlreadyExists() throws Exception {
+        String username = faker.name().username();
+        String payload = createPostPayload(username);
+
+        performPost(payload)
+            .andExpect(status().isOk());
+
+        performPost(payload)
+            .andExpect(status().isBadRequest());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.ministore.api.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +33,15 @@ public class CreateUserHandler {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is invalid");
         }
 
-        return this.userService.createUser(request.username);
+        User user = null;
+
+        try {
+            user = this.userService.createUser(request.username);
+        } catch(DataIntegrityViolationException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is invalid");
+        }
+
+        return user;
     }
 
 }
