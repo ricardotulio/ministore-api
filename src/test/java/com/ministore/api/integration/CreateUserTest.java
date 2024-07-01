@@ -1,6 +1,7 @@
 package com.ministore.api.integration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -70,6 +71,8 @@ public class CreateUserTest {
             result.getResponse().getContentAsString(), 
             CreateUserResponse.class
         );
+        
+        assertEquals(response.username, username);
 
         performGet(response.id)
             .andExpect(jsonPath("$.id").value(response.id))
