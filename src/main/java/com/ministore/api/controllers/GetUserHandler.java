@@ -25,14 +25,10 @@ public class GetUserHandler {
         value = "/users/{id}",
         produces = "application/json"
     )
-    public Optional<User> getUser(@PathVariable String id) {
-        Optional<User> user = this.repository.findById(id);
-
-        if (user.isEmpty()) { 
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found");
-        }
-
-        return user;
+    public User getUser(@PathVariable String id) {
+        return this.repository
+            .findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
 }
