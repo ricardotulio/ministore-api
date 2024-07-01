@@ -22,7 +22,7 @@ public class GetUserHandler {
     }
 
     @GetMapping(
-        value = "/user/{id}",
+        value = "/users/{id}",
         produces = "application/json"
     )
     public Optional<User> getUser(@PathVariable String id) {

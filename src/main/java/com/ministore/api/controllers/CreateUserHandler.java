@@ -23,7 +23,7 @@ public class CreateUserHandler {
     }
 
     @PostMapping(
-        value = "/user",
+        value = "/users",
         consumes = "application/json",
         produces = "application/json"
     )
