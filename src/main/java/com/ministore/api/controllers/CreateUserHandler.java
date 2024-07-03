@@ -29,19 +29,14 @@ public class CreateUserHandler {
     )
     private User createUser(@RequestBody CreateUserRequest request)
     {
-        if (request.username == null || request.username.isEmpty()) {
+        if (!request.isValid()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is invalid");
         }
-
-        User user = null;
 
         try {
-            user = this.userService.createUser(request.username);
+            return this.userService.createUser(request.username);
         } catch(DataIntegrityViolationException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is invalid");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "username is invalid");
         }
-
-        return user;
     }
-
 }
