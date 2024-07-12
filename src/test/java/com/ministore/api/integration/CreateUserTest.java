@@ -88,7 +88,7 @@ public class CreateUserTest {
             .andExpect(status().isOk());
 
         performPost(payload)
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isConflict());
     }
 
     @Test
