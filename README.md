@@ -8,6 +8,7 @@ Welcome to the Ministore API project! The goal of this project is to serve as a 
   - [Introduction](#introduction)
   - [Technologies Used](#technologies-used)
   - [Installation](#installation)
+  - [Testing](#testing)
   - [Usage](#usage)
   - [Contributing](#contributing)
   
@@ -45,6 +46,13 @@ $ docker-compose up -d
 2. Open your browser and navigate to:
 ```url
 http://localhost:8080
+```
+
+## Testing
+To test this project, run the following command:
+
+```bash
+$ docker exec -it app ./mvnw clean test
 ```
 
 ## Contributing
