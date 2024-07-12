@@ -32,7 +32,7 @@ $ cd ministore-api
 
 3. Install dependencies:
 ```bash
-$ ./mvnw install
+$ ./mvnw install -DskipTests
 ```
 
 ## Usage
