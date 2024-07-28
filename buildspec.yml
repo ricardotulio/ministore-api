@@ -1,0 +1,13 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - echo Packing JAR file...
+      - ./mvnw install -DskipTests
+    post_build:
+      commands:
+        - echo Build complete.
+artifacts:
+  files:
+    - target/app.jar
+  discard-paths: yes
