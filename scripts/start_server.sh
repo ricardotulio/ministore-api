@@ -1,5 +1,6 @@
 #!/bin/bash
 # Start the Spring Boot application
+source /etc/environment
 echo "Spring Datasource: $SPRING_DATASOURCE_URL" >> /home/ec2-user/variables.log
 echo "Postgres User: $POSTGRES_USER" >> /home/ec2-user/variables.log
 echo "Postgres Password: $POSTGRES_PASSWORD" >> /home/ec2-user/variables.log
