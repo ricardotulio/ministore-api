@@ -16,7 +16,7 @@ public class ApiApplication {
 	@GetMapping("/health")
 	public static String healthCheck()
 	{
-		return "{result: 'ok'}"; 
+		return "{result: 'ta tudo bem agora!'}"; 
 	}
 
 }
