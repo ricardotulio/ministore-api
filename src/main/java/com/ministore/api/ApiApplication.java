@@ -16,7 +16,7 @@ public class ApiApplication {
 	@GetMapping("/health")
 	public static String healthCheck()
 	{
-		return "{result: 'ta tudo bem agora!'}"; 
+		return "{result: 'testando pipeline com terraform!'}"; 
 	}
 
 }
