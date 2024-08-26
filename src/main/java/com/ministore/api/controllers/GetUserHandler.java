@@ -25,10 +25,13 @@ public class GetUserHandler {
         value = "/users/{id}",
         produces = "application/json"
     )
-    public User getUser(@PathVariable String id) {
-        return this.repository
+    public GetUserResponse getUser(@PathVariable String id) {
+        User user = this.repository
             .findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
 
+        GetUserResponse response = new GetUserResponse(user.getId(), user.getUsername());
+
+        return response;
+    }
 }

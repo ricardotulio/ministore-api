@@ -22,6 +22,7 @@ import com.github.javafaker.Faker;
 class CreateUserResponse {
     public String id;
     public String username;
+    public String password;
 }
 
 @SpringBootTest
@@ -51,15 +52,16 @@ public class CreateUserTest {
         return this.mockMvc.perform(post);
     }
 
-    private String createPostPayload(String username) {
-        return "{\"username\":\"" + username + "\"}";
+    private String createPostPayload(String username, String password) {
+        return "{\"username\":\"" + username + "\", \"password\":\"" +  password + "\"}";
     }
 
     @Test
     void mustBeAbleToCreateAUser() throws Exception
     {
         String username = faker.name().username();
-        String payload =  createPostPayload(username);
+        String password = faker.internet().password();
+        String payload =  createPostPayload(username, password);
 
         MvcResult result = performPost(payload)
             .andExpect(status().isOk())
@@ -82,7 +84,8 @@ public class CreateUserTest {
     @Test
     void mustReturnBadRequestWhenUsernameAlreadyExists() throws Exception {
         String username = faker.name().username();
-        String payload = createPostPayload(username);
+        String password = faker.internet().password();
+        String payload = createPostPayload(username, password);
 
         performPost(payload)
             .andExpect(status().isOk());
@@ -105,7 +108,23 @@ public class CreateUserTest {
 
     @Test
     void mustReturnBadRequestWhenUsernameIsInvalid() throws Exception {
-        performPost(createPostPayload(""))
+        String password = faker.internet().password();
+
+        performPost(createPostPayload("", password))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void mustReturnBadRequestWhenPasswordIsInvalid() throws Exception {
+        String username = faker.name().username();
+
+        performPost(createPostPayload(username, ""))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void mustReturnBadRequestWhenUsernameAndPasswordIsInvalid() throws Exception {
+        performPost(createPostPayload("", ""))
             .andExpect(status().isBadRequest());
     }
 
