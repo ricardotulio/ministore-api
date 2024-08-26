@@ -34,7 +34,7 @@ public class CreateUserHandler {
         }
 
         try {
-            return this.userService.createUser(request.username);
+            return this.userService.createUser(request.username, request.password);
         } catch(DataIntegrityViolationException exception) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "username is invalid");
         }
